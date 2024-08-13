@@ -1,0 +1,112 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #3b4664;
+  font-family: "Poppins", sans-serif;
+  position: relative;
+}
+section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  flex-direction: column;
+}
+.grid-container div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+main {
+  background-color: #252d44;
+  height: 350px;
+  width: 20%;
+  border-radius: 12px;
+}
+.input {
+  width: 20%;
+  height: 50px;
+  border: none;
+  text-align: right;
+  outline: none;
+  padding: 2%;
+  font-size: 30px;
+  caret-color: transparent;
+  border-radius: 12px;
+  margin-bottom: 2%;
+  background-color: #252d44;
+  color: #ffffff;
+}
+.f-sm {
+  font-size: 13px !important;
+}
+.input:focus {
+  outline: none;
+}
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  gap: 10px;
+  padding: 2%;
+}
+
+.grid-container > div {
+  background-color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  text-align: center;
+  font-size: 20px;
+  cursor: pointer;
+  font-weight: 500;
+}
+.ans {
+  background-color: #007d56 !important;
+  color: #ffffff;
+  font-weight: 600;
+}
+@media (max-width: 1200px) {
+  main,
+  .input {
+    width: 30%;
+  }
+}
+@media (max-width: 950px) {
+  main,
+  .input {
+    width: 40%;
+  }
+}
+@media (max-width: 700px) {
+  main,
+  .input {
+    width: 50%;
+  }
+}
+@media (max-width: 600px) {
+  main,
+  .input {
+    width: 60%;
+  }
+}
+@media (max-width: 500px) {
+  main,
+  .input {
+    width: 70%;
+  }
+  .grid-container,
+  .input {
+    padding: 5%;
+  }
+}
+@media (max-width: 400px) {
+  main,
+  .input {
+    width: 80%;
+  }
+}
+@media (max-width: 300px) {
+  main,
+  .input {
+    width: 90%;
+  }
+}
