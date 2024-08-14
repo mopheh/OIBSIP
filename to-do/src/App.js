@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react"
 import "./App.css"
 import { PlusIcon } from "@heroicons/react/20/solid"
+import { TrashIcon } from "@heroicons/react/24/outline"
 
 function App() {
   const [task, setTask] = useState({
     title: "",
     content: "",
+    time_created: new Date(),
+    status: "Pending",
   })
-  const storedTasks = JSON.parse(localStorage.getItem("tasks"))
+  const storedTasks =
+    localStorage.getItem("tasks").length &&
+    JSON.parse(localStorage.getItem("tasks"))
   const [tasks, setTasks] = useState(storedTasks || [])
   function handleChange(e) {
     const { name, value } = e.target
@@ -32,17 +37,26 @@ function App() {
       content: "",
     })
   }
-  const options = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
+  const markTask = (taskIndex) => {
+    tasks.find(
+      (item, index) => taskIndex === index && (item.status = "Completed")
+    )
+    localStorage.setItem("tasks", JSON.stringify(tasks))
+    setTasks(JSON.parse(localStorage.getItem("tasks")))
+  }
+  const deleteTask = (id) => {
+    setTasks((prevTasks) => {
+      return prevTasks.filter((Item, index) => {
+        return index !== id
+      })
+    })
   }
   return (
     <div className="p-24">
       <div className="title mb-10">
         <h1 className="text-4xl">To-Do</h1>
       </div>
-      <form className="mx-auto mb-5 w-1/3 relative">
+      <form className="mx-auto mb-8 w-1/3 relative">
         <div className="col-span-full">
           <input
             id="task-title"
@@ -64,13 +78,12 @@ function App() {
               onChange={handleChange}
               value={task.content}
               placeholder="Description"
-              className="block w-full rounded-md p-3 border-0 focus:outline-none py-1.5 text-gray-900 shadow-sm  placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              defaultValue={""}
+              className="block b-sha w-full rounded-md p-3 border-0 focus:outline-none py-1.5 text-gray-900 shadow-sm  placeholder:text-gray-400 mt-5 sm:text-sm sm:leading-6"
             />
           </div>
         </div>
         <div
-          className="rounded-full bg-green-900 w-9 p-1 ml-auto absolute -bottom-3 cursor-pointer right-0"
+          className="rounded-full r-btn bg-green-900 w-9 p-1 ml-auto absolute -bottom-3 cursor-pointer right-0"
           onClick={submit}
         >
           <PlusIcon className="text-white" />
@@ -99,27 +112,42 @@ function App() {
               <div className="flex items-center w-full justify-between gap-x-4 mt-2 text-xs">
                 <time className="text-gray-500">
                   Task Created -{" "}
-                  {new Date().toLocaleDateString(undefined, options)}
+                  {new Date(task.time_created).toLocaleString("en-GB")}
                 </time>
                 <a
                   href="#"
-                  className="relative z-10 capitalize rounded-full bg-red-50 px-3 py-1.5 font-medium text-red-600 hover:bg-red-100"
+                  className={`relative z-10 capitalize rounded-full ${
+                    task.status === "Pending"
+                      ? "bg-red-50 text-red-600 hover:bg-red-100"
+                      : "bg-green-50 text-green-600 hover:bg-green-100"
+                  }  px-3 py-1.5 font-medium `}
                 >
-                  Task Pending
+                  Task {task.status}
                 </a>
               </div>
               <div className="flex items-center w-full justify-between gap-x-4 mt-2 text-xs">
                 <a
                   href="#"
+                  onClick={() => {
+                    markTask(index)
+                  }}
                   className="relative z-10 capitalize rounded-full bg-green-50 px-3 py-1.5 font-medium text-green-600 hover:bg-green-100"
+                  disabled={`${task.status === "Completed" && true}`}
                 >
-                  Mark Complete
+                  {task.status === "Pending" ? "Mark Complete" : "Completed"}
                 </a>
                 <span> - </span>
-                <time className="text-gray-500">
-                  {new Date().toLocaleDateString(undefined, options)}
-                </time>
+                <time className="text-gray-500">{}</time>
               </div>
+              <a
+                href="#"
+                onClick={() => {
+                  deleteTask(index)
+                }}
+                className="relative z-10 capitalize rounded-full bg-red-50 px-3 py-1.5 font-medium ml-auto mt-3  text-xs hover:bg-red-100"
+              >
+                <TrashIcon className="h-5 w-5 text-red-600" />
+              </a>
             </article>
           ))}
       </div>
