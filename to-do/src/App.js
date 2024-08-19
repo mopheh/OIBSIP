@@ -44,6 +44,9 @@ function App() {
     tasks.find(
       (item, index) => taskIndex === index && (item.status = "Completed")
     )
+    tasks.find(
+      (item, index) => taskIndex === index && (item.completed = new Date())
+    )
     localStorage.setItem("tasks", JSON.stringify(tasks))
     setTasks(JSON.parse(localStorage.getItem("tasks")))
   }
@@ -59,7 +62,7 @@ function App() {
       <div className="title mb-10">
         <h1 className="text-4xl">To-Do</h1>
       </div>
-      <form className="mx-auto mb-8 w-1/3 relative">
+      <form className="mx-auto mb-8 sm:w-3/3 md:w-2/3 lg:w-1/3 relative">
         <div className="col-span-full">
           <input
             id="task-title"
@@ -92,7 +95,7 @@ function App() {
           <PlusIcon className="text-white" />
         </div>
       </form>
-      <div className="mx-auto grid  grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-5 sm:pt-3 lg:mx-0 lg:max-w-none md:grid-cols-3 lg:grid-cols-4">
+      <div className="mx-auto grid  grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-5 sm:pt-3 lg:mx-0 lg:max-w-none sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         {tasks.map((task, index) => (
           <article
             key={index}
@@ -126,27 +129,29 @@ function App() {
               </a>
             </div>
             <div className="flex items-center w-full justify-between gap-x-4 mt-2 text-xs">
-              <a
-                href="#"
+              <button
                 onClick={() => {
                   markTask(index)
                 }}
                 className="relative z-10 capitalize rounded-full bg-green-50 px-3 py-1.5 font-medium text-green-600 hover:bg-green-100"
+                // disabled
               >
                 {task.status === "Pending" ? "Mark Complete" : "Completed"}
-              </a>
+              </button>
               <span> - </span>
-              <time className="text-gray-500">{}</time>
+              <time className="text-gray-500">
+                {task.completed &&
+                  new Date(task.completed).toLocaleString("en-GB")}
+              </time>
             </div>
-            <a
-              href="#"
+            <button
               onClick={() => {
                 deleteTask(index)
               }}
               className="relative z-10 capitalize rounded-full bg-red-50 px-3 py-1.5 font-medium ml-auto mt-3  text-xs hover:bg-red-100"
             >
               <TrashIcon className="h-5 w-5 text-red-600" />
-            </a>
+            </button>
           </article>
         ))}
       </div>
